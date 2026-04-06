@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "from": "admin",
+    "to": "user1",
+    "message": "مرحبًا بك في Mix Platform! استمتع بعالم الأحلام.",
+    "read": true,
+    "timestamp": "2026-04-06T09:00:00Z"
+  },
+  {
+    "id": 2,
+    "from": "user1",
+    "to": "admin",
+    "message": "شكرًا! متحمس لاستكشاف كل الميزات.",
+    "read": true,
+    "timestamp": "2026-04-06T09:05:00Z"
+  },
+  {
+    "id": 3,
+    "from": "user1",
+    "to": "user2",
+    "message": "مرحبًا! هل انضممت إلى Dream World بعد؟",
+    "read": false,
+    "timestamp": "2026-04-06T09:30:00Z"
+  },
+  {
+    "id": 4,
+    "from": "user2",
+    "to": "user1",
+    "message": "نعم، بدأت استكشاف أماكن جديدة ومذهلة!",
+    "read": false,
+    "timestamp": "2026-04-06T09:35:00Z"
+  },
+  {
+    "id": 5,
+    "from": "user3",
+    "to": "user1",
+    "message": "هل رأيت التأثير الجديد للضوء في City World؟",
+    "read": false,
+    "timestamp": "2026-04-06T10:00:00Z"
+  },
+  {
+    "id": 6,
+    "from": "user1",
+    "to": "user3",
+    "message": "بعد قليل سأجربه، يبدو رائعًا!",
+    "read": false,
+    "timestamp": "2026-04-06T10:05:00Z"
+  }
+]
