@@ -79,3 +79,24 @@
     </script>
 </body>
 </html>
+
+import QuestsSystem from "./static/modules/metaverse/quests_system.js";
+
+// اللاعب
+const player = {
+    position: {x: 0, z: 0},
+    energy: 100,
+    coins: 0
+};
+
+// إنشاء النظام
+const quests = new QuestsSystem(player);
+
+// إضافة مهمة
+quests.addQuest("quest_1", "قم بزيارة NPC 1 في العالم", {x: 10, z: 5}, {energy: 10, coins: 50});
+quests.startQuest("quest_1");
+
+// داخل Loop اللعبة
+worldEngine.onUpdate(() => {
+    quests.update();
+});
