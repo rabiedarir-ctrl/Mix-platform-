@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "worldName": "defaultWorld",
+    "description": "عالم افتراضي بسيط للمبتدئين.",
+    "energyRequired": 5,
+    "baseFrequency": 438,
+    "lighting": "soft",
+    "resources": ["basicTerrain", "simpleObjects"],
+    "status": "active"
+  },
+  {
+    "id": 2,
+    "worldName": "dreamWorld",
+    "description": "عالم الأحلام مليء بالغيوم والألوان السحرية.",
+    "energyRequired": 10,
+    "baseFrequency": 432,
+    "lighting": "ethereal",
+    "resources": ["dreamSky", "floatingObjects", "ambientMusic"],
+    "status": "active"
+  },
+  {
+    "id": 3,
+    "worldName": "cityWorld",
+    "description": "مدينة مستقبلية مليئة بالأضواء والمباني الضخمة.",
+    "energyRequired": 15,
+    "baseFrequency": 440,
+    "lighting": "neon",
+    "resources": ["cityBuildings", "streetLights", "trafficObjects"],
+    "status": "active"
+  }
+]
