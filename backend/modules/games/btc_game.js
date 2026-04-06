@@ -1,75 +1,91 @@
-const WalletManager = require('../wallet/wallet_manager').WalletManager;
-const walletManager = new WalletManager();
+const WebSocket = require('ws');
+const { broadcastToClients } = require('../metaverse/world_sync');
+const { processDream } = require('../metaverse/dreams_engine');
+
+let gameState = {
+    players: {},  // userId => {balance, position}
+    coins: []
+};
 
 let gameInterval;
-let coins = [];
-let player = { x: 200, y: 400, width: 20, height: 20 };
 
 // -------------------------------
-// 🔹 توليد عملة بيتكوين عشوائية
-function spawnCoin() {
-    const coin = {
-        x: Math.floor(Math.random() * 380),
-        y: 0,
-        size: 10,
-        collected: false
-    };
-    coins.push(coin);
-}
+// 🔹 بدء اللعبة للاعب معين
+function startGame(userId) {
+    if (!gameState.players[userId]) {
+        gameState.players[userId] = { balance: 100, position: { x:0, y:0, z:0 } };
+    }
 
-// -------------------------------
-// 🔹 تحديث موقع العملات وحالة اللاعب
-function updateCoins() {
-    coins.forEach(coin => {
-        coin.y += 2; // سرعة سقوط العملة
-        if (!coin.collected && detectCollision(player, coin)) {
-            coin.collected = true;
-            walletManager.update_balance(player.id, 0.01, "Collected BTC coin");
-            console.log("Coin collected! +0.01 BTC");
-        }
-    });
-    // إزالة العملات المجمعة أو التي خرجت من الشاشة
-    coins = coins.filter(coin => coin.y < 400 && !coin.collected);
-}
-
-// -------------------------------
-// 🔹 كشف التصادم
-function detectCollision(player, coin) {
-    return (
-        player.x < coin.x + coin.size &&
-        player.x + player.width > coin.x &&
-        player.y < coin.y + coin.size &&
-        player.y + player.height > coin.y
-    );
-}
-
-// -------------------------------
-// 🔹 رسم اللعبة (placeholder، يمكن ربطه بالواجهة frontend)
-function draw() {
-    // هنا يمكن إضافة الكود لواجهة Three.js أو Canvas
-    updateCoins();
-}
-
-// -------------------------------
-// 🔹 تشغيل اللعبة
-function startGame(playerId) {
-    player.id = playerId;
-    coins = [];
     if (gameInterval) clearInterval(gameInterval);
+
     gameInterval = setInterval(() => {
-        draw();
-        if (Math.random() < 0.05) spawnCoin();
-    }, 1000 / 60); // 60 FPS
-    console.log("BTC Game started for player ID:", playerId);
+        updateCoins();
+        broadcastGameState();
+    }, 1000);
 }
 
 // -------------------------------
-// 🔹 إيقاف اللعبة
+// 🔹 توليد عملات عشوائية
+function updateCoins() {
+    if (Math.random() < 0.2) {
+        const coin = {
+            id: `coin_${Date.now()}`,
+            value: Math.floor(Math.random()*10)+1,
+            position: {
+                x: Math.random()*50-25,
+                y: 1,
+                z: Math.random()*50-25
+            }
+        };
+        gameState.coins.push(coin);
+        broadcastToClients({ type:'new_coin', coin });
+    }
+}
+
+// -------------------------------
+// 🔹 تحديث حالة اللاعب بعد التقاط عملة
+function collectCoin(userId, coinId) {
+    const coinIndex = gameState.coins.findIndex(c => c.id === coinId);
+    if (coinIndex === -1) return;
+
+    const coin = gameState.coins.splice(coinIndex,1)[0];
+    gameState.players[userId].balance += coin.value;
+
+    // إشعار اللاعب
+    broadcastToClients({
+        type:'coin_collected',
+        userId,
+        coin,
+        balance: gameState.players[userId].balance
+    });
+
+    // ربط مع Dream Engine عند قيمة معينة
+    if (gameState.players[userId].balance >= 500) {
+        processDream(`لقد وصلت رصيد 500 BTC في اللعبة!`, userId);
+    }
+}
+
+// -------------------------------
+// 🔹 بث حالة اللعبة لكل العملاء
+function broadcastGameState() {
+    broadcastToClients({
+        type:'game_state',
+        players: gameState.players,
+        coins: gameState.coins
+    });
+}
+
+// -------------------------------
+// 🔹 إنهاء اللعبة
 function stopGame() {
     if (gameInterval) clearInterval(gameInterval);
-    console.log("BTC Game stopped");
+    gameInterval = null;
 }
 
 // -------------------------------
 // 🔹 التصدير
-module.exports = { startGame, stopGame };
+module.exports = {
+    startGame,
+    stopGame,
+    collectCoin
+};
