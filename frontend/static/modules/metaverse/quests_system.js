@@ -6,9 +6,11 @@ import { sendEvent, on } from "../../matrix.js";
 export default class QuestsSystem {
     constructor(player) {
         this.player = player; // لاعب رئيسي
+        this.wallet = wallet;     // رابط المحفظة
         this.quests = new Map(); // questId -> quest object
         this.activeQuests = new Set(); // questId
     }
+
 
     // ===========================
     // 🔹 إضافة مهمة
@@ -63,9 +65,21 @@ export default class QuestsSystem {
         this.player.energy += quest.reward.energy || 0;
         this.player.coins += quest.reward.coins || 0;
 
+
+        // تسجيل المعاملة في المحفظة
+        if (this.wallet) {
+            this.wallet.addTransaction({
+                type: "quest_reward",
+                questId: id,
+                coins: quest.reward.coins || 0,
+                energy: quest.reward.energy || 0,
+                timestamp: Date.now()
+            });
+        
         console.log(`🏆 Quest Completed: ${quest.description}`);
         console.log(`💰 Reward: Energy ${quest.reward.energy || 0}, Coins ${quest.reward.coins || 0}`);
 
+        
         // إرسال حدث للمزامنة
         sendEvent("quest_completed", { questId: id });
     }
