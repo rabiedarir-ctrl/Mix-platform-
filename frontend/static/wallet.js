@@ -1,5 +1,25 @@
 import { WalletAPI } from "./api.js";
 
+class Wallet {
+    constructor() {
+        this.coins = 0;
+        this.energy = 0;
+        this.transactions = [];
+    }
+
+    addTransaction(tx) {
+        this.transactions.push(tx);
+        this.coins += tx.coins || 0;
+        this.energy += tx.energy || 0;
+
+        console.log("💳 Transaction added:", tx);
+    }
+}
+
+// مثال ربط مع QuestsSystem
+const playerWallet = new Wallet();
+const quests = new QuestsSystem(player, playerWallet);
+
 // ===========================
 // 🔹 عناصر DOM الأساسية
 // ===========================
