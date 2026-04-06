@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "email": "admin@mixplatform.com",
+    "password": "hashed_password_here",
+    "role": "admin",
+    "energy": 100,
+    "frequency": 440,
+    "createdAt": "2026-04-06T00:00:00Z",
+    "lastLogin": null
+  },
+  {
+    "id": 2,
+    "username": "user1",
+    "email": "user1@mixplatform.com",
+    "password": "hashed_password_here",
+    "role": "user",
+    "energy": 50,
+    "frequency": 430,
+    "createdAt": "2026-04-06T00:00:00Z",
+    "lastLogin": null
+  }
+]
