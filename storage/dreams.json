@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "username": "user1",
+    "dreamTitle": "رحلة إلى الغيوم",
+    "world": "dreamWorld",
+    "energyCost": 10,
+    "frequency": 432,
+    "status": "active",
+    "startedAt": "2026-04-06T08:00:00Z",
+    "endedAt": null,
+    "description": "استكشاف عالم الأحلام مليء بالغيوم والألوان الزاهية."
+  },
+  {
+    "id": 2,
+    "username": "user2",
+    "dreamTitle": "مدينة المستقبل",
+    "world": "cityWorld",
+    "energyCost": 15,
+    "frequency": 440,
+    "status": "completed",
+    "startedAt": "2026-04-06T09:00:00Z",
+    "endedAt": "2026-04-06T09:45:00Z",
+    "description": "زيارة مدينة مستقبلية مليئة بالبنايات الضخمة والأضواء المتوهجة."
+  },
+  {
+    "id": 3,
+    "username": "user1",
+    "dreamTitle": "العالم الافتراضي الافتراضي",
+    "world": "defaultWorld",
+    "energyCost": 5,
+    "frequency": 438,
+    "status": "active",
+    "startedAt": "2026-04-06T10:00:00Z",
+    "endedAt": null,
+    "description": "تجربة عالم افتراضي بسيط قبل الدخول إلى الأحلام الكبيرة."
+  }
+]
