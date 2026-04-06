@@ -100,3 +100,17 @@ quests.startQuest("quest_1");
 worldEngine.onUpdate(() => {
     quests.update();
 });
+
+import NPCAI from "./static/modules/metaverse/npc_ai.js";
+
+// إنشاء النظام
+const npcSystem = new NPCAI(worldEngine.scene);
+
+// إنشاء NPC
+const npcMesh = worldEngine.createNPCMesh(); // تحتاج إضافتها
+npcSystem.createNPC("npc_1", npcMesh);
+
+// داخل loop
+worldEngine.onUpdate((delta) => {
+    npcSystem.update(delta, playerMesh.position);
+});
