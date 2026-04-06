@@ -19,6 +19,17 @@ dreamSocket.onerror = (err) => {
     console.error("Dream Engine WebSocket error:", err);
 };
 
+createNPCMesh() {
+    const geometry = new THREE.BoxGeometry(1, 2, 1);
+    const material = new THREE.MeshStandardMaterial({ color: 0xffaa00 });
+
+    const npc = new THREE.Mesh(geometry, material);
+    npc.position.set(5, 1, 5);
+
+    this.scene.add(npc);
+    return npc;
+}
+
 // -------------------------------
 // 🔹 تحديث عالم الأحلام ثلاثي الأبعاد
 function updateDreamWorld(dreamData) {
@@ -59,6 +70,8 @@ function createDreamObject(name, position, id) {
 
     window.DreamWorld.addObject(object);
 }
+
+
 
 // -------------------------------
 // 🔹 تحديث حركة الكائنات
