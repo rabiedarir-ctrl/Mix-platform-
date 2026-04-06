@@ -1,0 +1,25 @@
+[
+  {
+    "id": 1,
+    "username": "user1",
+    "content": "مرحبا بكم في Mix Platform!",
+    "media": null,
+    "likes": 10,
+    "comments": [],
+    "createdAt": "2026-04-06T00:00:00Z"
+  },
+  {
+    "id": 2,
+    "username": "user2",
+    "content": "بدأت رحلتي في عالم الأحلام!",
+    "media": "/assets/textures/dream/dreamSky.jpg",
+    "likes": 25,
+    "comments": [
+      {
+        "username": "user1",
+        "comment": "جميل جدًا!"
+      }
+    ],
+    "createdAt": "2026-04-06T01:00:00Z"
+  }
+]
