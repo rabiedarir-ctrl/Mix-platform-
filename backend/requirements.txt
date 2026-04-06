@@ -1,0 +1,21 @@
+# ===============================
+# MIX PLATFORM - PYTHON REQUIREMENTS
+# ===============================
+
+# 🔹 Core Utilities
+python-dotenv==1.0.1
+
+# 🔹 API / Web دعم (اختياري إذا استعملت Flask لاحقًا)
+flask==3.0.3
+
+# 🔹 AI / Data Processing
+numpy==1.26.4
+
+# 🔹 JSON & Data Handling (مدمج لكن نثبت أدوات مساعدة)
+pydantic==2.7.1
+
+# 🔹 Scheduling (بديل/مكمل لـ scheduler.py)
+schedule==1.2.1
+
+# 🔹 Logging & Monitoring (اختياري)
+loguru==0.7.2
