@@ -46,3 +46,9 @@ class AIAlerts:
         self.memory.remove("id", alert_id)
         log_info(f"Alert deleted: ID {alert_id} for user {user_id}")
         return True
+
+// مثال
+const response = await fetch("/api/npc/chat", {
+    method: "POST",
+    body: JSON.stringify({ message })
+});
