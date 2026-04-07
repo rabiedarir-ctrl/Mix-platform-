@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>تسجيل الدخول إلى Mix Platform</h1>
+     <h1>تسجيل الدخول إلى Mix Platform</h1>
     </header>
 
     <main>
@@ -63,6 +63,8 @@
                     // حفظ التوكن في localStorage
                     localStorage.setItem("mixToken", data.token);
                     window.location.href = "dashboard.html";
+                   // بعد التحقق من المستخدم
+                    window.location.href = 'index.html'; // 
                 } else {
                     feedback.textContent = data.message || "خطأ في تسجيل الدخول";
                 }
