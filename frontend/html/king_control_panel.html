@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة الملك التفاعلية - Mix Platform</title>
+
+<!-- ملفات CSS الموحدة -->
+<link rel="stylesheet" href="static/Theme.css">
+<link rel="stylesheet" href="static/dashboard.css">
+<link rel="stylesheet" href="static/hud.css">
+<link rel="stylesheet" href="static/buttons.css">
+<link rel="stylesheet" href="static/world.css">
+
+<style>
+body { background: #111; color: #fff; font-family: "Segoe UI", sans-serif; overflow-x: hidden; }
+h1 { text-align: center; color: #00ffcc; margin-top: 15px; }
+#energy-bar { width: 90%; height: 20px; margin: 15px auto; background: #222; border-radius: 10px; overflow: hidden; }
+#energy-fill { height: 100%; width: 0%; background: #00ffcc; transition: 0.3s; }
+#control-panels { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 20px; }
+.panel { background: rgba(0,0,0,0.75); border-radius: 10px; padding: 15px; width: 300px; position: relative; }
+.panel h2 { font-size: 16px; color: #00ffcc; margin-bottom: 10px; cursor: pointer; }
+.panel-content { display: block; transition: 0.3s; }
+button { margin: 5px 0; padding: 8px 12px; font-size: 14px; border-radius: 8px; cursor: pointer; background: #222; color: #00ffcc; border: 1px solid #00ffcc; transition: 0.2s; width: 100%; }
+button:hover { background: #00ffcc; color: #111; }
+#log { margin-top: 20px; max-height: 300px; overflow-y: auto; background: rgba(0,0,0,0.6); padding: 12px; border-radius: 8px; font-size: 13px; }
+.log-entry { margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 3px; }
+.notification-toast { position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.85); padding: 10px 15px; border-radius: 8px; color: #00ffcc; margin-bottom: 10px; animation: slideIn 0.5s ease forwards; z-index: 10000; pointer-events: auto; }
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+</style>
+</head>
+<body>
+
+<h1>لوحة الملك التفاعلية - Mix Platform</h1>
+
+<div id="energy-bar">
+  <div id="energy-fill"></div>
+</div>
+
+<div id="control-panels">
+
+  <!-- المساعد الأمني -->
+  <div class="panel" id="security-panel">
+    <h2>المساعد الأمني</h2>
+    <div class="panel-content">
+      <button id="activate-assistant">تفعيل المساعد الأمني</button>
+      <button id="deactivate-assistant">إيقاف المساعد الأمني</button>
+      <button id="auto-recharge">شحن الطاقة تلقائي</button>
+      <button id="lock-all-zones">قفل جميع العوالم</button>
+      <button id="show-alerts">عرض التنبيهات</button>
+    </div>
+  </div>
+
+  <!-- الأحلام -->
+  <div class="panel" id="dreams-panel">
+    <h2>الأحلام</h2>
+    <div class="panel-content">
+      <button id="generate-dream">توليد حلم جديد</button>
+      <button id="stop-dreams">إيقاف جميع الأحلام</button>
+      <button id="list-dreams">عرض الأحلام الحالية</button>
+    </div>
+  </div>
+
+  <!-- الألعاب -->
+  <div class="panel" id="games-panel">
+    <h2>الألعاب</h2>
+    <div class="panel-content">
+      <button id="start-game">تشغيل لعبة</button>
+      <button id="stop-game">إيقاف اللعبة</button>
+      <button id="list-games">قائمة الألعاب</button>
+    </div>
+  </div>
+
+  <!-- المحفظة والمتجر -->
+  <div class="panel" id="wallet-panel">
+    <h2>المحفظة والمتجر</h2>
+    <div class="panel-content">
+      <button id="view-wallet">عرض المحفظة</button>
+      <button id="process-transactions">معالجة المعاملات</button>
+      <button id="open-store">فتح المتجر</button>
+    </div>
+  </div>
+
+  <!-- الرسائل والتواصل -->
+  <div class="panel" id="social-panel">
+    <h2>الرسائل والتواصل</h2>
+    <div class="panel-content">
+      <button id="show-messages">عرض الرسائل</button>
+      <button id="send-announcement">إرسال إعلان للجميع</button>
+      <button id="manage-users">إدارة المستخدمين</button>
+    </div>
+  </div>
+
+</div>
+
+<div id="log">
+  <div class="log-entry">سجل الأحداث سيظهر هنا.</div>
+</div>
+
+<div id="notification-container"></div>
+
+<script src="backend/core/helpers.js"></script>
+<script src="backend/core/sensory.js"></script>
+<script src="backend/core/assistant_security.js"></script>
+<script src="backend/core/dreams_engine.js"></script>
+<script src="backend/core/games.js"></script>
+<script src="backend/core/wallet.js"></script>
+<script src="backend/core/social.js"></script>
+<script src="backend/core/world.js"></script>
+
+<script>
+const logContainer = document.getElementById("log");
+const energyFill = document.getElementById("energy-fill");
+const notificationContainer = document.getElementById("notification-container");
+
+// =========================
+// 🔹 وظائف مساعدة
+// =========================
+function appendLog(message){
+  const div = document.createElement("div");
+  div.className = "log-entry";
+  div.innerText = `[${new Date().toLocaleTimeString()}] ${message}`;
+  logContainer.appendChild(div);
+  logContainer.scrollTop = logContainer.scrollHeight;
+}
+
+function showNotification(message){
+  const div = document.createElement("div");
+  div.className = "notification-toast";
+  div.innerText = message;
+  notificationContainer.appendChild(div);
+  setTimeout(()=> div.remove(), 4000);
+}
+
+// =========================
+// 🔹 تحديث شريط الطاقة تلقائياً
+// =========================
+function updateEnergy() {
+  const state = Sensory.getCurrentState();
+  let energy = state.brainSignals.energy || 0;
+  let color = energy > 0.7 ? "#00ffcc" : (energy > 0.4 ? "#ffcc00" : "#ff3300");
+  energyFill.style.width = `${Math.floor(energy*100)}%`;
+  energyFill.style.background = color;
+}
+setInterval(updateEnergy, 1000);
+
+// =========================
+// 🔹 وظائف المساعد الأمني
+// =========================
+document.getElementById("activate-assistant").onclick = () => { SecurityAssistant.activate(); appendLog("تم تفعيل المساعد الأمني."); showNotification("المساعد الأمني نشط."); };
+document.getElementById("deactivate-assistant").onclick = () => { SecurityAssistant.deactivate(); appendLog("تم إيقاف المساعد الأمني."); showNotification("تم إيقاف المساعد الأمني."); };
+document.getElementById("auto-recharge").onclick = () => { SecurityAssistant.autoRecharge?.(); appendLog("تم شحن الطاقة تلقائيًا."); showNotification("شحن الطاقة تلقائي."); };
+document.getElementById("lock-all-zones").onclick = () => { World.lockAllZones?.(); appendLog("تم قفل جميع العوالم."); showNotification("قفل جميع العوالم."); };
+document.getElementById("show-alerts").onclick = () => {
+  const alerts = SecurityAssistant.getState().alerts || [];
+  appendLog("عرض التنبيهات:");
+  alerts.forEach(a=>appendLog(a.message));
+  showNotification("تم عرض جميع التنبيهات.");
+};
+
+// =========================
+// 🔹 الأحلام
+// =========================
+document.getElementById("generate-dream").onclick = () => { DreamsEngine.generate(); appendLog("تم توليد حلم جديد."); showNotification("حلم جديد منشأ."); };
+document.getElementById("stop-dreams").onclick = () => { DreamsEngine.stopAll(); appendLog("تم إيقاف جميع الأحلام."); showNotification("توقف جميع الأحلام."); };
+document.getElementById("list-dreams").onclick = () => { appendLog("الأحلام الحالية: " + JSON.stringify(DreamsEngine.list())); };
+
+// =========================
+// 🔹 الألعاب
+// =========================
+document.getElementById("start-game").onclick = () => { Games.start(); appendLog("تم تشغيل اللعبة."); showNotification("اللعبة تعمل."); };
+document.getElementById("stop-game").onclick = () => { Games.stop(); appendLog("تم إيقاف اللعبة."); showNotification("تم إيقاف اللعبة."); };
+document.getElementById("list-games").onclick = () => { appendLog("قائمة الألعاب: " + JSON.stringify(Games.list())); };
+
+// =========================
+// 🔹 المحفظة والمتجر
+// =========================
+document.getElementById("view-wallet").onclick = () => { Wallet.show(); appendLog("عرض المحفظة."); };
+document.getElementById("process-transactions").onclick = () => { Wallet.processTransactions(); appendLog("تم معالجة المعاملات."); };
+document.getElementById("open-store").onclick = () => { Store.open(); appendLog("تم فتح المتجر."); };
+
+// =========================
+// 🔹 الرسائل والتواصل
+// =========================
+document.getElementById("show-messages").onclick = () => { Social.showMessages(); appendLog("عرض الرسائل."); };
+document.getElementById("send-announcement").onclick = () => { Social.broadcast("إعلان من الملك"); appendLog("تم إرسال إعلان."); showNotification("إرسال إعلان للجميع."); };
+document.getElementById("manage-users").onclick = () => { Social.manageUsers(); appendLog("إدارة المستخدمين."); };
+
+// =========================
+// 🔹 إعداد النظام تلقائياً
+// =========================
+SecurityAssistant.init({ monitoredZones: ["world1","world2","dreamWorld"], energyThreshold: 0.25 });
+appendLog("واجهة الملك التفاعلية جاهزة.");
+showNotification("لوحة التحكم الملكية نشطة.");
+</script>
+
+</body>
+  </html>
