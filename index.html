@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mix Platform</title>
-
+   
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="static/style.css">
+    <link rel="manifest" href="manifest.json">
 
     <!-- Favicon -->
     <link rel="icon" href="assets/textures/sky.jpg" type="image/jpeg">
@@ -15,54 +16,63 @@
     <script type="module" src="engine.js" defer></script>
     <script type="module" src="scene.js" defer></script>
     <script type="module" src="dashboard.js" defer></script>
+
+
 </head>
 <body>
-    <!-- واجهة المستخدم -->
-    <div id="app">
-        <!-- HUD أو لوحة التحكم -->
-        <div id="dashboard">
-            <h1>مرحبًا بك في Mix Platform</h1>
-            <div id="energy-status">الطاقة: <span id="energy-value">0</span></div>
-            <div id="frequency-status">التردد: <span id="frequency-value">0</span></div>
-        </div>
+    <header>
+        <h1>مرحبًا بك في Mix Platform</h1>
+        <nav>
+            <a href="login.html">تسجيل الدخول</a>
+            <a href="dashboard.html">لوحة التحكم</a>
+            <a href="feed.html">التغذية</a>
+        </nav>
+    </header>
 
-        <!-- منطقة عرض المشهد ثلاثي الأبعاد -->
-        <canvas id="main-canvas"></canvas>
+    <main>
+        <section id="intro">
+            <h2>استكشاف عالم الطاقة والأحلام</h2>
+            <p>
+                Mix Platform هو نظام تفاعلي يجمع بين:
+                <ul>
+                    <li>العالم الافتراضي ثلاثي الأبعاد</li>
+                    <li>إدارة الطاقة والخلايا للمستخدم</li>
+                    <li>الألعاب والتحديات</li>
+                    <li>عالم الأحلام التفاعلي</li>
+                    <li>الدردشة والمراسلات</li>
+                </ul>
+            </p>
+            <button onclick="location.href='login.html'">ابدأ الآن</button>
+        </section>
 
-        <!-- قائمة الرسائل -->
-        <div id="messages-feed"></div>
+        <section id="features">
+            <h2>المميزات الأساسية</h2>
+            <div class="feature-cards">
+                <div class="card">
+                    <h3>الأحلام</h3>
+                    <p>تفاعل مع عالم الأحلام الخاص بك وأضف أحداثًا ومشاهد تفاعلية.</p>
+                </div>
+                <div class="card">
+                    <h3>الألعاب</h3>
+                    <p>لعب ألعاب مثل BTC Game وتطوير الطاقة والنقاط.</p>
+                </div>
+                <div class="card">
+                    <h3>المجتمع</h3>
+                    <p>التفاعل مع منشورات المستخدمين، التعليقات، الرسائل والدردشة.</p>
+                </div>
+                <div class="card">
+                    <h3>العالم الافتراضي</h3>
+                    <p>استكشف Metaverse ثلاثي الأبعاد باستخدام محرك Three.js.</p>
+                </div>
+            </div>
+        </section>
+    </main>
 
-        <!-- قائمة الشبكات الاجتماعية -->
-        <div id="social-feed"></div>
-    </div>
+    <footer>
+        <p>© 2026 Mix Platform. جميع الحقوق محفوظة.</p>
+    </footer>
 
-    <!-- ملفات البيانات -->
-    <script>
-        const MIX_API_BASE = "http://localhost:3000";
-
-        // تحميل بيانات المستخدمين
-        fetch("storage/users.json")
-            .then(res => res.json())
-            .then(data => console.log("Users:", data))
-            .catch(err => console.error(err));
-
-        // تحميل البيانات الاجتماعية
-        fetch("storage/social.json")
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById("social-feed").innerHTML =
-                    JSON.stringify(data, null, 2);
-            })
-            .catch(err => console.error(err));
-
-        // تحميل الرسائل
-        fetch("storage/messages.json")
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById("messages-feed").innerHTML =
-                    JSON.stringify(data, null, 2);
-            })
-            .catch(err => console.error(err));
-    </script>
+    <script src="static/main.js"></script>
+    <script src="static/api.js"></script>
 </body>
 </html>
