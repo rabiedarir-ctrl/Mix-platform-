@@ -1,0 +1,109 @@
+/* لوحة تحكم المناطق - Mix Platform */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+.dashboard {
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #ffffff;
+}
+
+.zones-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.zone-card {
+    background-color: #292929;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.zone-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.8);
+}
+
+.zone-card h2 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: #ffd700;
+}
+
+.zone-status {
+    margin: 15px 0;
+    font-size: 0.95rem;
+}
+
+.zone-status strong {
+    color: #00bfff;
+}
+
+.zone-status span {
+    color: #ffffff;
+}
+
+button {
+    margin: 5px 5px 0 0;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+button.direct {
+    background-color: #28a745;
+    color: #fff;
+}
+
+button.direct:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+button.indirect {
+    background-color: #ffc107;
+    color: #000;
+}
+
+button.indirect:hover {
+    background-color: #e0a800;
+    transform: scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .zones-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .zone-card {
+        padding: 15px;
+    }
+    .zone-status {
+        font-size: 0.9rem;
+    }
+    button {
+        width: 100%;
+        margin: 5px 0;
+    }
+  }
