@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mix Platform - لوحة تحكم المناطق</title>
+<link rel="stylesheet" href="../static/css/zoneDashboard.css">
+<style>
+/* CSS موحد داخلي لتجنب فقدان الربط */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+.dashboard {
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.zones-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.zone-card {
+    background-color: #292929;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #000000;
+}
+
+.zone-card h2 {
+    margin-top: 0;
+}
+
+.zone-status {
+    margin: 10px 0;
+}
+
+button {
+    margin: 5px 0;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button.direct {
+    background-color: #28a745;
+    color: #fff;
+}
+
+button.indirect {
+    background-color: #ffc107;
+    color: #000;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+</style>
+</head>
+<body>
+<div class="dashboard">
+    <h1>لوحة تحكم المناطق</h1>
+    <div class="zones-container" id="zonesContainer">
+        <!-- سيتم ملؤها ديناميكيًا عبر JS -->
+    </div>
+</div>
+
+<script>
+// JS موحد داخلي لتفعيل وعرض المناطق
+const zonesContainer = document.getElementById('zonesContainer');
+
+// جلب كل المناطق من API
+async function fetchZones() {
+    const response = await fetch('/api/zones', { credentials: 'include' });
+    return await response.json();
+}
+
+// إنشاء بطاقة منطقة
+function createZoneCard(zoneId, zoneData) {
+    const card = document.createElement('div');
+    card.className = 'zone-card';
+    card.id = `zone-${zoneId}`;
+
+    card.innerHTML = `
+        <h2>${zoneData.name} (${zoneId})</h2>
+        <div class="zone-status">
+            <strong>الطاقة:</strong> <span class="energy">${zoneData.energy.toFixed(2)}</span><br>
+            <strong>نوى+:</strong> <span class="nplus">${zoneData.nplus.toFixed(2)}</span><br>
+            <strong>نوى-:</strong> <span class="nminus">${zoneData.nminus.toFixed(2)}</span>
+        </div>
+        <button class="direct" onclick="activateZone('${zoneId}', 'direct')">تفعيل مباشر</button>
+        <button class="indirect" onclick="activateZone('${zoneId}', 'indirect')">تفعيل غير مباشر</button>
+    `;
+    zonesContainer.appendChild(card);
+}
+
+// عرض كل المناطق
+async function renderZones() {
+    const data = await fetchZones();
+    zonesContainer.innerHTML = '';
+    Object.keys(data.zones).forEach(zoneId => {
+        createZoneCard(zoneId, data.zones[zoneId]);
+    });
+}
+
+// تفعيل منطقة
+async function activateZone(zoneId, actionType) {
+    const value = parseFloat(prompt('ادخل قيمة التفعيل:', '10'));
+    if (!value || value <= 0) return alert('قيمة غير صالحة');
+
+    const response = await fetch(`/api/zones/activate/${zoneId}`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ value, actionType })
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+        updateZoneCard(zoneId, result.zone);
+    } else {
+        alert(result.error || 'حدث خطأ أثناء التفعيل');
+    }
+}
+
+// تحديث بطاقة المنطقة
+function updateZoneCard(zoneId, zoneData) {
+    const card = document.getElementById(`zone-${zoneId}`);
+    if (!card) return;
+    card.querySelector('.energy').textContent = zoneData.energy.toFixed(2);
+    card.querySelector('.nplus').textContent = zoneData.nplus.toFixed(2);
+    card.querySelector('.nminus').textContent = zoneData.nminus.toFixed(2);
+}
+
+// WebSocket للتحديث اللحظي من EventBus
+const socket = new WebSocket('ws://localhost:3000'); // عدل حسب إعدادات السيرفر
+socket.addEventListener('message', (event) => {
+    const data = JSON.parse(event.data);
+    if (data.type === 'zone.activated') {
+        updateZoneCard(data.zoneId, data);
+    }
+});
+
+// تحميل المناطق عند بدء التشغيل
+renderZones();
+</script>
+</body>
+  </html>
