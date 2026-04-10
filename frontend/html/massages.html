@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الرسائل - Mix Platform</title>
-    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
     <header>
         <h1>المحادثات</h1>
         <nav>
-            <a href="dashboard.html">لوحة التحكم</a>
-            <a href="feed.html">التغذية</a>
-            <a href="games.html">الألعاب</a>
-            <a href="dream_world.html">عالم الأحلام</a>
+            <a href="../dashboard.html">لوحة التحكم</a>
+            <a href="../feed.html">التغذية</a>
+            <a href="../games.html">الألعاب</a>
+            <a href="../dream_world.html">عالم الأحلام</a>
             <button id="logoutBtn">تسجيل الخروج</button>
         </nav>
     </header>
@@ -42,8 +42,8 @@
         <p>© 2026 Mix Platform. جميع الحقوق محفوظة.</p>
     </footer>
 
-    <script src="static/api.js"></script>
-    <script src="static/messages.js"></script>
+    <script src="../static/api.js"></script>
+    <script src="../static/messages.js"></script>
     <script>
         const token = localStorage.getItem("mixToken");
         if (!token) window.location.href = "login.html";
