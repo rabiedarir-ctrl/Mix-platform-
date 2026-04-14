@@ -2,10 +2,10 @@
 // 🔹 Dashboard Module
 // ===========================
 
-import { fetchData } from "./api.js";
-import VoiceChat from "./voice_chat.js";
-import EventsSystem from "./modules/metaverse/events_system.js";
-import QuestsSystem from "./modules/metaverse/quests_system.js";
+import { fetchData } from "../api.js";
+import VoiceChat from "../voice_chat.js";
+import EventsSystem from "../modules/metaverse/events_system.js";
+import QuestsSystem from "../modules/metaverse/quests_system.js";
 
 class Dashboard {
     constructor(player, wallet, worldEngine) {
@@ -81,7 +81,7 @@ class Dashboard {
     updateNotifications() {
         if (this.notificationsEl) {
             // افترض وجود API للإشعارات
-            fetchData("/notifications").then(data => {
+            fetchData("../notifications").then(data => {
                 if (!data || data.length === 0) {
                     this.notificationsEl.textContent = "📬 لا توجد إشعارات";
                 } else {
