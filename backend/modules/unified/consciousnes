@@ -1,0 +1,148 @@
+// Consciousness Engine - Core
+
+class ConsciousnessEngine {
+  constructor() {
+    this.frequencies = [];
+    this.density = 0;
+    this.energy = 1;
+    this.state = "idle";
+    this.mode = "neutral";
+
+    this.thresholds = {
+      low: 0.3,
+      medium: 0.7
+    };
+
+    this.stateFunctions = {
+      fear: () => this.avoid(),
+      happiness: () => this.explore(),
+      execute: () => this.execute(),
+      command: () => this.command()
+    };
+  }
+
+  // =========================
+  // 1. استقبال الترددات
+  // =========================
+  receiveFrequency(freq) {
+    this.frequencies.push({
+      type: freq.type || "sensory",
+      value: freq.value || 0,
+      source: freq.source || "unknown"
+    });
+  }
+
+  // =========================
+  // 2. حساب الكثافة
+  // =========================
+  computeDensity() {
+    const sum = this.frequencies.reduce((acc, f) => acc + f.value, 0);
+    this.density = sum * this.energy;
+
+    // استهلاك الطاقة
+    this.energy -= this.frequencies.length * 0.01;
+    if (this.energy < 0) this.energy = 0;
+
+    return this.density;
+  }
+
+  // =========================
+  // 3. توليد الحالة
+  // =========================
+  determineState() {
+    if (this.density < this.thresholds.low) {
+      this.state = "low";
+    } else if (this.density < this.thresholds.medium) {
+      this.state = "medium";
+    } else {
+      this.state = "high";
+    }
+
+    return this.state;
+  }
+
+  // =========================
+  // 4. تحويل الحالة إلى وضع
+  // =========================
+  transformState() {
+    switch (this.state) {
+      case "low":
+        this.mode = "idle";
+        break;
+      case "medium":
+        this.mode = "thinking";
+        break;
+      case "high":
+        this.mode = "active";
+        break;
+    }
+
+    return this.mode;
+  }
+
+  // =========================
+  // 5. إطلاق عشوائي (الخيال)
+  // =========================
+  randomizeFrequencies() {
+    if (this.state === "high") {
+      const randomFreq = {
+        type: "imaginary",
+        value: Math.random() * 0.5,
+        source: "imagination"
+      };
+      this.frequencies.push(randomFreq);
+    }
+  }
+
+  // =========================
+  // 6. تنفيذ الدوال
+  // =========================
+  runFunction(type) {
+    if (this.stateFunctions[type]) {
+      return this.stateFunctions[type]();
+    }
+    return null;
+  }
+
+  // =========================
+  // سلوكيات النظام
+  avoid() {
+    return { action: "avoid", status: "fear reaction" };
+  }
+
+  explore() {
+    return { action: "explore", status: "curiosity mode" };
+  }
+
+  execute() {
+    return { action: "execute", status: "task running" };
+  }
+
+  command() {
+    return { action: "command", status: "external order" };
+  }
+
+  // =========================
+  // دورة تشغيل كاملة
+  // =========================
+  tick(inputFrequencies = []) {
+    this.frequencies = [];
+
+    inputFrequencies.forEach(f => this.receiveFrequency(f));
+
+    this.computeDensity();
+    this.determineState();
+    this.transformState();
+    this.randomizeFrequencies();
+
+    return {
+      density: this.density,
+      state: this.state,
+      mode: this.mode,
+      energy: this.energy,
+      frequencies: this.frequencies
+    };
+  }
+}
+
+module.exports = ConsciousnessEngine;
