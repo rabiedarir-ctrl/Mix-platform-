@@ -1,4 +1,4 @@
-import { SocialAPI, UsersAPI } from "./api.js";
+import { SocialAPI, UsersAPI } from "../api.js";
 
 // ===========================
 // 🔹 عناصر DOM الأساسية
