@@ -7,7 +7,7 @@ const zonesContainer = document.getElementById('zonesContainer');
 // -------------------------------------------
 async function fetchZones() {
     try {
-        const response = await fetch('/api/zones', { credentials: 'include' });
+        const response = await fetch('../api/zones', { credentials: 'include' });
         if (!response.ok) throw new Error('فشل جلب المناطق');
         return await response.json();
     } catch (error) {
@@ -56,7 +56,7 @@ async function activateZone(zoneId, actionType) {
     if (!value || value <= 0) return alert('قيمة غير صالحة');
 
     try {
-        const response = await fetch(`/api/zones/activate/${zoneId}`, {
+        const response = await fetch(`../api/zones/activate/${zoneId}`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
