@@ -60,7 +60,7 @@ async function startGame(gameId, name) {
     // تحميل ديناميكي للعبة
     try {
         if (gameId === "btc_game") {
-            const module = await import("./modules/games/btc_game.js");
+            const module = await import("../modules/games/btc_game.js");
             module.startBTCGame(gameContainer, onGameEnd);
         } else {
             gameContainer.innerHTML = "<p>اللعبة غير متوفرة حالياً</p>";
