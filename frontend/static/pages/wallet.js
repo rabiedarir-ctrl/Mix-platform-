@@ -1,4 +1,4 @@
-import { WalletAPI } from "./api.js";
+import { WalletAPI } from "../api.js";
 
 class Wallet {
     constructor() {
